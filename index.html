@@ -14,7 +14,6 @@
   <style>
     /* Verhindert Flackern beim Laden */
     [x-cloak] { display: none !important; }
-    /* Eigene Scrollbar für Tabellen etc. */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -57,7 +56,14 @@
       teams: [],
       weeks: [],
       startDate: new Date().toISOString().split('T')[0],
-      expandedWeeks: {}
+      expandedWeeks: {},
+      github: {
+        owner: '',
+        repo: '',
+        path: 'pubquiz_data.json',
+        token: '',
+        lastSha: null
+      }
     };
 
     // --- UTILS ---
@@ -78,7 +84,6 @@
         type === 'error' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
       }`;
       
-      // Icons neu rendern, da die Box vorher "hidden" war
       lucide.createIcons();
 
       setTimeout(() => {
@@ -96,6 +101,7 @@
           if (parsed.teams) state.teams = parsed.teams;
           if (parsed.weeks) state.weeks = parsed.weeks;
           if (parsed.startDate) state.startDate = parsed.startDate;
+          if (parsed.github) state.github = { ...state.github, ...parsed.github };
         } catch (e) {
           console.error('Fehler beim Laden', e);
         }
@@ -106,8 +112,104 @@
       localStorage.setItem('pubquizData', JSON.stringify({
         teams: state.teams,
         weeks: state.weeks,
-        startDate: state.startDate
+        startDate: state.startDate,
+        github: state.github
       }));
+    };
+
+    // --- GITHUB SYNC ---
+    window.updateGithubSettings = (field, value) => {
+      state.github[field] = value;
+      saveState();
+    };
+
+    window.saveToGithub = async () => {
+      const { owner, repo, path, token, lastSha } = state.github;
+      if (!owner || !repo || !path || !token) {
+        showNotification('Bitte fülle alle GitHub-Konfigurationsfelder aus.', 'error');
+        return;
+      }
+
+      showNotification('Speichere in GitHub...', 'success');
+
+      try {
+        const dataToSave = { teams: state.teams, weeks: state.weeks, startDate: state.startDate };
+        const jsonStr = JSON.stringify(dataToSave, null, 2);
+        
+        // UTF-8 sichere Base64 Codierung für Umlaute
+        const base64Content = btoa(unescape(encodeURIComponent(jsonStr)));
+
+        const body = {
+          message: `Pubquiz Update: ${new Date().toLocaleString('de-DE')}`,
+          content: base64Content
+        };
+        if (lastSha) body.sha = lastSha;
+
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          if (res.status === 409 || (errData.message && errData.message.includes('sha'))) {
+            throw new Error('Konflikt: Datei wurde auf GitHub geändert. Bitte erst herunterladen!');
+          }
+          throw new Error(errData.message || 'Speichern fehlgeschlagen.');
+        }
+
+        const resData = await res.json();
+        state.github.lastSha = resData.content.sha;
+        saveState();
+        showNotification('Erfolgreich in GitHub gespeichert!');
+      } catch (error) {
+        showNotification(`GitHub Fehler: ${error.message}`, 'error');
+      }
+    };
+
+    window.loadFromGithub = async () => {
+      const { owner, repo, path, token } = state.github;
+      if (!owner || !repo || !path || !token) {
+        showNotification('Bitte fülle alle GitHub-Konfigurationsfelder aus.', 'error');
+        return;
+      }
+
+      showNotification('Lade von GitHub...', 'success');
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+          headers: {
+            'Authorization': `token ${token}`
+          }
+        });
+
+        if (res.status === 404) {
+          showNotification('Datei existiert auf GitHub noch nicht. Bitte zuerst speichern.', 'error');
+          return;
+        }
+        if (!res.ok) throw new Error('Download fehlgeschlagen.');
+
+        const resData = await res.json();
+        state.github.lastSha = resData.sha;
+
+        // UTF-8 sichere Base64 Dekodierung
+        const jsonStr = decodeURIComponent(escape(atob(resData.content)));
+        const parsed = JSON.parse(jsonStr);
+
+        if (parsed.teams) state.teams = parsed.teams;
+        if (parsed.weeks) state.weeks = parsed.weeks;
+        if (parsed.startDate) state.startDate = parsed.startDate;
+
+        saveState();
+        renderApp();
+        showNotification('Erfolgreich von GitHub geladen!');
+      } catch (error) {
+        showNotification(`GitHub Fehler: ${error.message}`, 'error');
+      }
     };
 
     // --- ACTIONS ---
@@ -121,6 +223,13 @@
       const input = document.getElementById('new-team-name');
       const teamName = input.value.trim();
       if (!teamName) return;
+
+      // Check auf Einzigartigkeit
+      const exists = state.teams.some(t => t.name.toLowerCase() === teamName.toLowerCase());
+      if (exists) {
+        showNotification('Ein Team mit diesem Namen existiert bereits im Pool.', 'error');
+        return;
+      }
 
       state.teams.push({ id: generateId(), name: teamName });
       input.value = '';
@@ -141,11 +250,24 @@
     };
 
     window.updateTeamName = (id, newName) => {
+      const trimmedName = newName.trim();
+      if (!trimmedName) {
+        renderApp(); // Fallback wenn leer
+        return;
+      }
+      
       const team = state.teams.find(t => t.id === id);
       if (team) {
-        team.name = newName;
+        // Prüfen, ob ein anderes Team schon so heißt
+        const exists = state.teams.some(t => t.id !== id && t.name.toLowerCase() === trimmedName.toLowerCase());
+        if (exists) {
+          showNotification('Dieser Teamname wird bereits verwendet.', 'error');
+          renderApp(); // Setzt das Feld auf alten Wert zurück
+          return;
+        }
+
+        team.name = trimmedName;
         saveState();
-        // Render erst beim Verlassen des Feldes (onchange/onblur), um Fokus nicht zu stören
         renderApp();
       }
     };
@@ -188,7 +310,7 @@
 
     window.updateWeekDate = (id, newDate) => {
       const week = state.weeks.find(w => w.id === id);
-      if (week) {
+      if (week && week.date !== newDate) {
         week.date = newDate;
         state.weeks.sort((a, b) => new Date(b.date) - new Date(a.date));
         saveState();
@@ -220,8 +342,6 @@
         if (score) {
           score[field] = field === 'points' ? Number(value) : value;
           saveState();
-          // Kein komplettes Re-Render hier, wenn gewünscht, da onchange reicht
-          // Um die Sortierung sofort anzuwenden, machen wir ein Re-Render
           renderApp();
         }
       }
@@ -263,7 +383,7 @@
       return teamStats.sort((a, b) => b.totalPoints - a.totalPoints);
     };
 
-    // --- IMPORTS & EXPORTS ---
+    // --- IMPORTS & EXPORTS (Manual File) ---
     window.exportJSON = () => {
       const data = { teams: state.teams, weeks: state.weeks, startDate: state.startDate };
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
@@ -295,7 +415,7 @@
         }
       };
       reader.readAsText(file);
-      event.target.value = ''; // Reset Input
+      event.target.value = ''; 
     };
 
     window.exportHTML = () => {
@@ -485,7 +605,7 @@
       const weeksHtml = state.weeks.map((week, index) => {
         const isExpanded = !!state.expandedWeeks[week.id];
         
-        // Verfügbare Teams berechnen und alphabetisch sortieren
+        // Verfügbare Teams berechnen (nimmt bereits ausgewählte Teams aus dem Dropdown!)
         const availableTeams = state.teams
           .filter(t => !week.scores.some(s => s.teamId === t.id))
           .sort((a, b) => a.name.localeCompare(b.name));
@@ -502,7 +622,6 @@
         if (week.scores.length === 0) {
           scoresHtml = `<p class="text-center text-slate-500 py-4 italic">Noch keine Teams für diesen Spieltag eingetragen.</p>`;
         } else {
-          // Scores sortiert nach Punkten absteigend
           const sortedScores = [...week.scores].sort((a, b) => b.points - a.points);
           
           let rows = sortedScores.map(score => {
@@ -571,8 +690,9 @@
                 <i data-lucide="${isExpanded ? 'chevron-down' : 'chevron-right'}" class="text-slate-400"></i>
                 <h3 class="font-bold text-lg text-slate-800 flex items-center gap-3">
                   Spieltag ${state.weeks.length - index}
+                  <!-- WICHTIG: onblur statt onchange, damit beim Tippen des Jahres nicht der Fokus verloren geht -->
                   <input type="date" value="${week.date}"
-                         onchange="window.updateWeekDate('${week.id}', this.value)"
+                         onblur="window.updateWeekDate('${week.id}', this.value)"
                          onclick="event.stopPropagation()"
                          class="text-sm font-normal text-slate-600 bg-slate-100 hover:bg-slate-200 focus:bg-white border border-transparent focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 px-2 py-1 rounded-md cursor-text transition-all" />
                 </h3>
@@ -609,8 +729,6 @@
       if (state.teams.length === 0) {
         teamsListHtml = `<p class="p-8 text-center text-slate-500 italic">Noch keine Teams im Pool.</p>`;
       } else {
-        // Teams für die Liste im Pool nicht unbedingt alphabetisch (oder doch, hier lassen wir die Einfügereihenfolge oder sortieren)
-        // Einfache Darstellung, ohne Sortierung (damit neue Teams unten landen):
         teamsListHtml = `<ul class="divide-y divide-slate-100">` + 
           state.teams.map(team => `
             <li class="p-4 flex items-center gap-4 hover:bg-slate-50">
@@ -640,7 +758,7 @@
                 </button>
               </form>
               <div class="mt-6 pt-6 border-t border-slate-100 text-sm text-slate-500">
-                <p><strong>Hinweis:</strong> Variationen von Teamnamen (z.B. wegen fehlender Mitglieder) werden direkt beim Eintragen am jeweiligen Spieltag angegeben.</p>
+                <p><strong>Hinweis:</strong> Variationen von Teamnamen (z.B. wegen fehlender Mitglieder) werden direkt beim Eintragen am jeweiligen Spieltag angegeben. Ein Teamname muss im Pool eindeutig sein.</p>
               </div>
             </div>
           </div>
@@ -677,25 +795,60 @@
             </div>
           </div>
 
-          <!-- Im/Export -->
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-              <i data-lucide="save" class="w-5 h-5 text-indigo-500"></i> Datensicherung
+          <!-- GitHub Cloud Sync -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-gray-800">
+            <h3 class="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <i data-lucide="github" class="w-5 h-5 text-gray-800"></i> GitHub Datenbank
             </h3>
             <p class="text-slate-600 text-sm mb-6">
-              Alle Daten werden automatisch in deinem aktuellen Browser gespeichert. 
-              Erstelle regelmäßig ein Backup als JSON-Datei, um die Daten auf ein anderes Gerät zu übertragen oder vor Verlust zu schützen.
+              Speichere deine Pubquiz-Daten direkt als JSON in einem GitHub-Repository, um ein serverloses Backup zu haben. <br/>
+              <em>Token-Tipp: Erstelle einen "Personal Access Token" (classic) mit 'repo'-Rechten in GitHub.</em>
             </p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">GitHub Username / Orga</label>
+                <input type="text" value="${state.github.owner}" onchange="window.updateGithubSettings('owner', this.value)" placeholder="z.B. maxmustermann" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg w-full p-2" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Repository Name</label>
+                <input type="text" value="${state.github.repo}" onchange="window.updateGithubSettings('repo', this.value)" placeholder="z.B. pubquiz-db" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg w-full p-2" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Dateipfad</label>
+                <input type="text" value="${state.github.path}" onchange="window.updateGithubSettings('path', this.value)" placeholder="z.B. data.json" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg w-full p-2" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Personal Access Token (PAT)</label>
+                <input type="password" value="${state.github.token}" onchange="window.updateGithubSettings('token', this.value)" placeholder="ghp_xxxxxxxxxxx" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg w-full p-2" />
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button onclick="window.loadFromGithub()" class="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300 p-2.5 rounded-lg font-medium transition-colors text-sm">
+                <i data-lucide="cloud-download" class="w-4 h-4"></i> Aus GitHub laden
+              </button>
+              <button onclick="window.saveToGithub()" class="flex-1 flex items-center justify-center gap-2 bg-gray-800 text-white hover:bg-gray-900 p-2.5 rounded-lg font-medium transition-colors text-sm">
+                <i data-lucide="cloud-upload" class="w-4 h-4"></i> In GitHub speichern
+              </button>
+            </div>
+          </div>
+
+          <!-- Manueller Im/Export -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+              <i data-lucide="save" class="w-5 h-5 text-indigo-500"></i> Lokale Backups
+            </h3>
             
             <div class="flex flex-col sm:flex-row gap-4">
               <button onclick="window.exportJSON()" class="flex-1 flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 p-3 rounded-lg font-medium transition-colors">
-                <i data-lucide="download" class="w-5 h-5"></i> Als JSON exportieren
+                <i data-lucide="download" class="w-5 h-5"></i> Als lokale JSON exportieren
               </button>
               
               <div class="flex-1 relative">
                 <input type="file" accept=".json" onchange="window.importJSON(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                 <div class="flex items-center justify-center gap-2 bg-white text-slate-700 hover:bg-slate-50 border border-slate-300 p-3 rounded-lg font-medium transition-colors pointer-events-none">
-                  <i data-lucide="upload" class="w-5 h-5"></i> Daten importieren
+                  <i data-lucide="upload" class="w-5 h-5"></i> Lokale Datei importieren
                 </div>
               </div>
             </div>
@@ -714,7 +867,6 @@
       if (state.activeTab === 'teams') contentContainer.innerHTML = renderTeams();
       if (state.activeTab === 'settings') contentContainer.innerHTML = renderSettings();
 
-      // Lucide Icons nach jedem Render initialisieren
       lucide.createIcons();
     };
 
