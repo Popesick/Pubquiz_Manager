@@ -1,0 +1,891 @@
+{
+  "teams": [
+    {
+      "id": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+      "name": "For Shizzle ma Quizzle"
+    },
+    {
+      "id": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+      "name": "De Koidn"
+    },
+    {
+      "id": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+      "name": "Bierkönige"
+    },
+    {
+      "id": "8eeeeaae-ae2e-48b3-ac04-f55c922cccde",
+      "name": "The Skelligs"
+    },
+    {
+      "id": "5e2d1c32-ce8d-4ec9-ae6f-49f612f4fbfb",
+      "name": "Gruppe Arschlöcher"
+    },
+    {
+      "id": "8e502bfa-4f33-44cc-ac46-f5ef65785c84",
+      "name": "Moosrosen"
+    },
+    {
+      "id": "4a5a10e6-a8f9-4b77-94f8-08af7eaebb18",
+      "name": "Die 3 lustigen 2"
+    },
+    {
+      "id": "8e684d66-4547-42e0-8da3-a7f83446db0d",
+      "name": "Bumble Bees"
+    },
+    {
+      "id": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+      "name": "Schattenspieler"
+    },
+    {
+      "id": "a5e9bcfd-2e7e-4080-8685-d5186da7879e",
+      "name": "Trostpreis"
+    },
+    {
+      "id": "4baac91e-aff8-4738-8caf-28ae2dceaa38",
+      "name": "Rätsel Brezn"
+    },
+    {
+      "id": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+      "name": "Fuchsrudel"
+    },
+    {
+      "id": "0a282cea-4bb4-445a-8d08-2b87e12bef7b",
+      "name": "Die glorreichen 6"
+    },
+    {
+      "id": "f48280ae-a61e-460f-a530-d9bddc34d741",
+      "name": "Weiber-Stammtisch"
+    },
+    {
+      "id": "05c5f882-7d40-4367-90ca-05add9cdb223",
+      "name": "Triple Ranger"
+    },
+    {
+      "id": "ed8a5cbd-dd6e-47ab-8dad-06dc4956071f",
+      "name": "Schinken High 5"
+    },
+    {
+      "id": "0b479ff3-1770-4826-b2f3-b52234e9c64b",
+      "name": "ABD"
+    },
+    {
+      "id": "a4ec727c-8210-4319-aef9-4e47afcdbcc8",
+      "name": "The Rookies"
+    },
+    {
+      "id": "b5d7e3b2-1f1e-4f78-8c7e-8414a41443e3",
+      "name": "Old Clever Shitter"
+    },
+    {
+      "id": "b64de009-3b19-478f-a77a-011c478ff7c5",
+      "name": "Montagsquizzler"
+    },
+    {
+      "id": "989209d1-1251-4e50-add5-0f2bd7f0d80d",
+      "name": "Pub 9 3/4"
+    },
+    {
+      "id": "8f4b4c0f-42f4-45bb-a8cd-5cda339c5e83",
+      "name": "Newcomer"
+    },
+    {
+      "id": "164f4731-cb48-4be6-aa5d-0c20507967dd",
+      "name": "Huber Plus"
+    },
+    {
+      "id": "2885b4f4-7428-466b-979d-ab191e8320d6",
+      "name": "Oldies"
+    },
+    {
+      "id": "ec83ba36-08f3-4d7d-9055-b8facb464f95",
+      "name": "Der Rest"
+    },
+    {
+      "id": "9ff2cb1a-d23b-4673-bd8f-91bbd104eef4",
+      "name": "Lind'n Bankerl"
+    },
+    {
+      "id": "b7351bcc-f995-40f8-a37a-302ac17b21e2",
+      "name": "Das Partyboot"
+    },
+    {
+      "id": "08a35c08-5915-4e1e-adc6-5937de05ba4d",
+      "name": "AH Riese & EH Zwerg"
+    },
+    {
+      "id": "56c442f5-2562-4f69-bef5-4dec069cd25b",
+      "name": "Stranger Things"
+    },
+    {
+      "id": "98b9190e-83e9-4729-9fb4-d2d4f830f075",
+      "name": "Flotti Karotti"
+    },
+    {
+      "id": "e8aea5c6-2450-4033-86ef-9a0b5d54355f",
+      "name": "MFG"
+    },
+    {
+      "id": "c45ece89-ebc2-4eb9-a28d-c1d07ed7dbdf",
+      "name": "Corner Tigers"
+    },
+    {
+      "id": "a3eca076-9318-4712-aca5-8f98c4726e8f",
+      "name": "Stammtisch"
+    },
+    {
+      "id": "0825ee5b-7130-4fe0-a8f1-ec40d943e2b8",
+      "name": "Die Vergesslichen"
+    },
+    {
+      "id": "c7c2ba31-918f-4c3b-beea-f910eddab106",
+      "name": "Babberts Bierfelzl"
+    }
+  ],
+  "weeks": [
+    {
+      "id": "2e4405ee-9dda-4d17-8d04-49d2781cea2d",
+      "date": "2026-04-14",
+      "scores": [
+        {
+          "teamId": "a3eca076-9318-4712-aca5-8f98c4726e8f",
+          "teamNameUsed": "Stammtisch",
+          "points": 19
+        },
+        {
+          "teamId": "0825ee5b-7130-4fe0-a8f1-ec40d943e2b8",
+          "teamNameUsed": "Die Vergesslichen",
+          "points": 15.5
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 21.5
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 24.5
+        },
+        {
+          "teamId": "c7c2ba31-918f-4c3b-beea-f910eddab106",
+          "teamNameUsed": "Babberts Bierfelzl",
+          "points": 19
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 21
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 20
+        }
+      ]
+    },
+    {
+      "id": "7b79b282-9fca-46ed-b0ca-e9a222c059de",
+      "date": "2026-04-07",
+      "scores": [
+        {
+          "teamId": "e8aea5c6-2450-4033-86ef-9a0b5d54355f",
+          "teamNameUsed": "MFG",
+          "points": 13.5
+        },
+        {
+          "teamId": "c45ece89-ebc2-4eb9-a28d-c1d07ed7dbdf",
+          "teamNameUsed": "Corner Tigers",
+          "points": 17
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 26
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 23
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 21.5
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Extra kleine Schattenspieler",
+          "points": 19
+        }
+      ]
+    },
+    {
+      "id": "ad6ec2c4-f3a5-4e97-8716-3b005f71b430",
+      "date": "2026-03-31",
+      "scores": [
+        {
+          "teamId": "56c442f5-2562-4f69-bef5-4dec069cd25b",
+          "teamNameUsed": "Stranger Things",
+          "points": 11
+        },
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Das extrem kleine Fuchsrudel",
+          "points": 20
+        },
+        {
+          "teamId": "98b9190e-83e9-4729-9fb4-d2d4f830f075",
+          "teamNameUsed": "Flotti Karotti",
+          "points": 17
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 19
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 16
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Die schönen Schattenspieler",
+          "points": 16
+        }
+      ]
+    },
+    {
+      "id": "9a6f65a2-6249-4062-9d5e-ee70dfbc433d",
+      "date": "2026-03-24",
+      "scores": [
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 19.5
+        },
+        {
+          "teamId": "4baac91e-aff8-4738-8caf-28ae2dceaa38",
+          "teamNameUsed": "Rätsel Brezln",
+          "points": 24.5
+        },
+        {
+          "teamId": "08a35c08-5915-4e1e-adc6-5937de05ba4d",
+          "teamNameUsed": "AH Riese & EH Zwerg",
+          "points": 23
+        },
+        {
+          "teamId": "0a282cea-4bb4-445a-8d08-2b87e12bef7b",
+          "teamNameUsed": "Die glorreichen 6",
+          "points": 26
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 20
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 20
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 18
+        }
+      ]
+    },
+    {
+      "id": "b296d679-b166-441c-8c28-2ee7517500f9",
+      "date": "2026-03-10",
+      "scores": [
+        {
+          "teamId": "8e684d66-4547-42e0-8da3-a7f83446db0d",
+          "teamNameUsed": "Bumble Bees",
+          "points": 23.5
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 21
+        },
+        {
+          "teamId": "ec83ba36-08f3-4d7d-9055-b8facb464f95",
+          "teamNameUsed": "Der Rest",
+          "points": 20.5
+        },
+        {
+          "teamId": "9ff2cb1a-d23b-4673-bd8f-91bbd104eef4",
+          "teamNameUsed": "Lind'n Bankerl",
+          "points": 18
+        },
+        {
+          "teamId": "b7351bcc-f995-40f8-a37a-302ac17b21e2",
+          "teamNameUsed": "Das Partyboot",
+          "points": 14
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 23
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 22
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 22.5
+        }
+      ]
+    },
+    {
+      "id": "8b0cbe95-b1af-4666-b0ff-7a712258818f",
+      "date": "2026-03-03",
+      "scores": [
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 21
+        },
+        {
+          "teamId": "164f4731-cb48-4be6-aa5d-0c20507967dd",
+          "teamNameUsed": "Huber Plus",
+          "points": 16
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 22
+        },
+        {
+          "teamId": "2885b4f4-7428-466b-979d-ab191e8320d6",
+          "teamNameUsed": "Oldies",
+          "points": 18.5
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 18
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 18
+        }
+      ]
+    },
+    {
+      "id": "61fe8092-bed1-4878-8971-c854a4de8540",
+      "date": "2026-02-24",
+      "scores": [
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 18.5
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 19
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 17
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 15
+        },
+        {
+          "teamId": "8f4b4c0f-42f4-45bb-a8cd-5cda339c5e83",
+          "teamNameUsed": "Newcomer",
+          "points": 18
+        }
+      ]
+    },
+    {
+      "id": "d137eea3-6bdc-44be-afd1-ca2712baa142",
+      "date": "2026-01-20",
+      "scores": [
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler light",
+          "points": 15
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 14
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 20
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 16.5
+        },
+        {
+          "teamId": "8f4b4c0f-42f4-45bb-a8cd-5cda339c5e83",
+          "teamNameUsed": "Newcomer",
+          "points": 17
+        }
+      ]
+    },
+    {
+      "id": "54a4e1d5-9c23-4539-bb30-c166d8dc95fc",
+      "date": "2026-01-13",
+      "scores": [
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Fuchsrudel",
+          "points": 21.5
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 25
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 27.5
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 27
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 24
+        }
+      ]
+    },
+    {
+      "id": "55ce43bd-07db-4cdf-8dc3-fcbbc91b5669",
+      "date": "2025-12-16",
+      "scores": [
+        {
+          "teamId": "8eeeeaae-ae2e-48b3-ac04-f55c922cccde",
+          "teamNameUsed": "The Skelligs",
+          "points": 16
+        },
+        {
+          "teamId": "989209d1-1251-4e50-add5-0f2bd7f0d80d",
+          "teamNameUsed": "Pub 9 3/4",
+          "points": 14.5
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 25.5
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 20.5
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 20.5
+        },
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Fuchsrudel",
+          "points": 18
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 19.5
+        }
+      ]
+    },
+    {
+      "id": "cc00ddda-1967-4763-890a-01d6f5f5781d",
+      "date": "2025-12-09",
+      "scores": [
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 17
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 16.5
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 19
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 19.5
+        },
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Fuchsrudel",
+          "points": 16
+        }
+      ]
+    },
+    {
+      "id": "cc8c302b-e0fc-4ae2-ba96-f7cbab478206",
+      "date": "2025-12-02",
+      "scores": [
+        {
+          "teamId": "a4ec727c-8210-4319-aef9-4e47afcdbcc8",
+          "teamNameUsed": "The Rookies",
+          "points": 15.5
+        },
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Fuchsrudel",
+          "points": 23
+        },
+        {
+          "teamId": "b5d7e3b2-1f1e-4f78-8c7e-8414a41443e3",
+          "teamNameUsed": "Old Clever Shitter",
+          "points": 16.5
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Oidn",
+          "points": 13.5
+        },
+        {
+          "teamId": "b64de009-3b19-478f-a77a-011c478ff7c5",
+          "teamNameUsed": "Montagsquizzler",
+          "points": 22.5
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 19
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 16
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 22.5
+        }
+      ]
+    },
+    {
+      "id": "6acba2a3-77de-4237-a9cc-49e48e016739",
+      "date": "2025-11-25",
+      "scores": [
+        {
+          "teamId": "0b479ff3-1770-4826-b2f3-b52234e9c64b",
+          "teamNameUsed": "ABD",
+          "points": 22
+        },
+        {
+          "teamId": "4a5a10e6-a8f9-4b77-94f8-08af7eaebb18",
+          "teamNameUsed": "Die 3 lustigen 2",
+          "points": 14
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 22.5
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 25
+        },
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Fuchsrudel",
+          "points": 25
+        },
+        {
+          "teamId": "0a282cea-4bb4-445a-8d08-2b87e12bef7b",
+          "teamNameUsed": "Die glorreichen 6",
+          "points": 25
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 26.5
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 27
+        }
+      ]
+    },
+    {
+      "id": "35233f63-6fb8-462e-8394-60e423251e08",
+      "date": "2025-11-18",
+      "scores": [
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 20.5
+        },
+        {
+          "teamId": "4baac91e-aff8-4738-8caf-28ae2dceaa38",
+          "teamNameUsed": "Rätsel Brezln",
+          "points": 22
+        },
+        {
+          "teamId": "8e684d66-4547-42e0-8da3-a7f83446db0d",
+          "teamNameUsed": "Bumble Bees",
+          "points": 22
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 24
+        },
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Fuchsrudel",
+          "points": 24
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 18
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 17.5
+        }
+      ]
+    },
+    {
+      "id": "bc7cc235-2d18-4f03-aaf4-9707ad924b10",
+      "date": "2025-11-11",
+      "scores": [
+        {
+          "teamId": "05c5f882-7d40-4367-90ca-05add9cdb223",
+          "teamNameUsed": "Triple Ranger",
+          "points": 13
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 21.5
+        },
+        {
+          "teamId": "8eeeeaae-ae2e-48b3-ac04-f55c922cccde",
+          "teamNameUsed": "The Skelligs",
+          "points": 14
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 19.5
+        },
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Fuchsrudel",
+          "points": 20.5
+        },
+        {
+          "teamId": "ed8a5cbd-dd6e-47ab-8dad-06dc4956071f",
+          "teamNameUsed": "Schinken High 5",
+          "points": 15.5
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 16
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 15
+        }
+      ]
+    },
+    {
+      "id": "24c0d81b-535b-4248-88ca-d7d3b0928ad6",
+      "date": "2025-11-04",
+      "scores": [
+        {
+          "teamId": "8eeeeaae-ae2e-48b3-ac04-f55c922cccde",
+          "teamNameUsed": "The Skelligs",
+          "points": 20
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 21
+        },
+        {
+          "teamId": "f48280ae-a61e-460f-a530-d9bddc34d741",
+          "teamNameUsed": "Weiber-Stammtisch",
+          "points": 13
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 21
+        },
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Fuchsrudel",
+          "points": 22
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 19
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 21
+        }
+      ]
+    },
+    {
+      "id": "fc993f18-b3fc-4bac-9587-a77909f7972a",
+      "date": "2025-10-28",
+      "scores": [
+        {
+          "teamId": "a5e9bcfd-2e7e-4080-8685-d5186da7879e",
+          "teamNameUsed": "Trostpreis",
+          "points": 9.5
+        },
+        {
+          "teamId": "4baac91e-aff8-4738-8caf-28ae2dceaa38",
+          "teamNameUsed": "Rätsel Brezln",
+          "points": 18.5
+        },
+        {
+          "teamId": "df42c11b-f58d-4a00-b6f1-6bec8a25e3bf",
+          "teamNameUsed": "Fuchsrudel",
+          "points": 21
+        },
+        {
+          "teamId": "0a282cea-4bb4-445a-8d08-2b87e12bef7b",
+          "teamNameUsed": "Die glorreichen 6",
+          "points": 18.5
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 20
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 23
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 23
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 20
+        },
+        {
+          "teamId": "8e684d66-4547-42e0-8da3-a7f83446db0d",
+          "teamNameUsed": "Bumble Bees",
+          "points": 18
+        }
+      ]
+    },
+    {
+      "id": "e400fe75-d0c0-44bd-855b-a56cf0198a82",
+      "date": "2025-10-21",
+      "scores": [
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 22.5
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 22
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 20.5
+        },
+        {
+          "teamId": "4a5a10e6-a8f9-4b77-94f8-08af7eaebb18",
+          "teamNameUsed": "Die 3 lustigen 2",
+          "points": 19.5
+        },
+        {
+          "teamId": "8e502bfa-4f33-44cc-ac46-f5ef65785c84",
+          "teamNameUsed": "Moosrosen",
+          "points": 19
+        },
+        {
+          "teamId": "8eeeeaae-ae2e-48b3-ac04-f55c922cccde",
+          "teamNameUsed": "The Skelligs",
+          "points": 18.5
+        },
+        {
+          "teamId": "5e2d1c32-ce8d-4ec9-ae6f-49f612f4fbfb",
+          "teamNameUsed": "Gruppe Arschlöcher",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "2e5ec01e-a60f-45f0-b1a8-b6557cf1f009",
+      "date": "2025-10-14",
+      "scores": [
+        {
+          "teamId": "8e684d66-4547-42e0-8da3-a7f83446db0d",
+          "teamNameUsed": "Bumble Bees",
+          "points": 26
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 24
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 24
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 24.5
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 26
+        }
+      ]
+    }
+  ],
+  "startDate": "2025-10-14"
+}
