@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pubquiz Manager</title>
+  
+  <!-- Tailwind CSS für das Styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Verhindert Flackern beim Laden */
+    [x-cloak] { display: none !important; }
+    /* Eigene Scrollbar für Tabellen etc. */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
+
+  <!-- Header -->
+  <header class="bg-indigo-600 text-white shadow-md">
+    <div class="max-w-5xl mx-auto px-4 py-6">
+      <h1 class="text-3xl font-bold flex items-center gap-3">
+        <i data-lucide="trophy" class="w-8 h-8 text-yellow-400"></i>
+        Pubquiz Manager
+      </h1>
+    </div>
+    <div class="max-w-5xl mx-auto px-4">
+      <nav id="nav-container" class="flex space-x-1 overflow-x-auto pb-2"></nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto p-4 py-8 relative">
+    
+    <!-- Notification Container -->
+    <div id="notification-container" class="hidden mb-6 p-4 rounded-lg items-center gap-3 shadow-sm transition-all duration-300">
+      <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0"></i>
+      <span id="notification-text" class="font-medium"></span>
+    </div>
+
+    <!-- App Content -->
+    <div id="app-content"></div>
+
+  </main>
+
+  <script>
+    // --- STATE MANAGEMENT ---
+    let state = {
+      activeTab: 'stats',
+      teams: [],
+      weeks: [],
+      startDate: new Date().toISOString().split('T')[0],
+      expandedWeeks: {}
+    };
+
+    // --- UTILS ---
+    const generateId = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15);
+    
+    const formatDate = (dateString) => {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    };
+
+    const showNotification = (message, type = 'success') => {
+      const container = document.getElementById('notification-container');
+      const text = document.getElementById('notification-text');
+      
+      text.innerText = message;
+      container.className = `mb-6 p-4 rounded-lg flex items-center gap-3 shadow-sm ${
+        type === 'error' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+      }`;
+      
+      // Icons neu rendern, da die Box vorher "hidden" war
+      lucide.createIcons();
+
+      setTimeout(() => {
+        container.classList.add('hidden');
+        container.classList.remove('flex');
+      }, 3000);
+    };
+
+    // --- DATA PERSISTENCE ---
+    const loadState = () => {
+      const saved = localStorage.getItem('pubquizData');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.teams) state.teams = parsed.teams;
+          if (parsed.weeks) state.weeks = parsed.weeks;
+          if (parsed.startDate) state.startDate = parsed.startDate;
+        } catch (e) {
+          console.error('Fehler beim Laden', e);
+        }
+      }
+    };
+
+    const saveState = () => {
+      localStorage.setItem('pubquizData', JSON.stringify({
+        teams: state.teams,
+        weeks: state.weeks,
+        startDate: state.startDate
+      }));
+    };
+
+    // --- ACTIONS ---
+    window.setTab = (tabId) => {
+      state.activeTab = tabId;
+      renderApp();
+    };
+
+    window.addTeam = (event) => {
+      event.preventDefault();
+      const input = document.getElementById('new-team-name');
+      const teamName = input.value.trim();
+      if (!teamName) return;
+
+      state.teams.push({ id: generateId(), name: teamName });
+      input.value = '';
+      saveState();
+      showNotification(`Team "${teamName}" hinzugefügt.`);
+      renderApp();
+    };
+
+    window.deleteTeam = (id) => {
+      const hasScores = state.weeks.some(w => w.scores.some(s => s.teamId === id));
+      if (hasScores) {
+        showNotification('Team kann nicht gelöscht werden, da es bereits an Spieltagen teilgenommen hat.', 'error');
+        return;
+      }
+      state.teams = state.teams.filter(t => t.id !== id);
+      saveState();
+      renderApp();
+    };
+
+    window.updateTeamName = (id, newName) => {
+      const team = state.teams.find(t => t.id === id);
+      if (team) {
+        team.name = newName;
+        saveState();
+        // Render erst beim Verlassen des Feldes (onchange/onblur), um Fokus nicht zu stören
+        renderApp();
+      }
+    };
+
+    window.setStartDate = (date) => {
+      state.startDate = date;
+      saveState();
+    };
+
+    window.addWeek = () => {
+      let nextDate = state.startDate;
+
+      if (state.weeks.length > 0) {
+        const dates = state.weeks.map(w => new Date(w.date).getTime());
+        const maxDate = new Date(Math.max(...dates));
+        maxDate.setDate(maxDate.getDate() + 7);
+        nextDate = maxDate.toISOString().split('T')[0];
+      }
+
+      const newWeek = {
+        id: generateId(),
+        date: nextDate,
+        scores: []
+      };
+
+      state.weeks.push(newWeek);
+      state.weeks.sort((a, b) => new Date(b.date) - new Date(a.date));
+      state.expandedWeeks[newWeek.id] = true;
+      
+      saveState();
+      showNotification('Neue Woche angelegt.');
+      renderApp();
+    };
+
+    window.deleteWeek = (id) => {
+      state.weeks = state.weeks.filter(w => w.id !== id);
+      saveState();
+      renderApp();
+    };
+
+    window.updateWeekDate = (id, newDate) => {
+      const week = state.weeks.find(w => w.id === id);
+      if (week) {
+        week.date = newDate;
+        state.weeks.sort((a, b) => new Date(b.date) - new Date(a.date));
+        saveState();
+        renderApp();
+      }
+    };
+
+    window.toggleWeek = (id) => {
+      state.expandedWeeks[id] = !state.expandedWeeks[id];
+      renderApp();
+    };
+
+    window.addTeamToWeek = (weekId, teamId) => {
+      if (!teamId) return;
+      const week = state.weeks.find(w => w.id === weekId);
+      const team = state.teams.find(t => t.id === teamId);
+      
+      if (week && team && !week.scores.some(s => s.teamId === teamId)) {
+        week.scores.push({ teamId: team.id, teamNameUsed: team.name, points: 0 });
+        saveState();
+        renderApp();
+      }
+    };
+
+    window.updateScore = (weekId, teamId, field, value) => {
+      const week = state.weeks.find(w => w.id === weekId);
+      if (week) {
+        const score = week.scores.find(s => s.teamId === teamId);
+        if (score) {
+          score[field] = field === 'points' ? Number(value) : value;
+          saveState();
+          // Kein komplettes Re-Render hier, wenn gewünscht, da onchange reicht
+          // Um die Sortierung sofort anzuwenden, machen wir ein Re-Render
+          renderApp();
+        }
+      }
+    };
+
+    window.removeTeamFromWeek = (weekId, teamId) => {
+      const week = state.weeks.find(w => w.id === weekId);
+      if (week) {
+        week.scores = week.scores.filter(s => s.teamId !== teamId);
+        saveState();
+        renderApp();
+      }
+    };
+
+    // --- CALCULATE STATS ---
+    const getCalculatedStats = () => {
+      const teamStats = state.teams.map(team => {
+        let totalPoints = 0;
+        let attendance = 0;
+
+        state.weeks.forEach(week => {
+          const score = week.scores.find(s => s.teamId === team.id);
+          if (score) {
+            totalPoints += score.points;
+            attendance += 1;
+          }
+        });
+
+        const average = attendance > 0 ? (totalPoints / attendance) : 0;
+
+        return {
+          ...team,
+          totalPoints,
+          attendance,
+          average
+        };
+      });
+
+      return teamStats.sort((a, b) => b.totalPoints - a.totalPoints);
+    };
+
+    // --- IMPORTS & EXPORTS ---
+    window.exportJSON = () => {
+      const data = { teams: state.teams, weeks: state.weeks, startDate: state.startDate };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+      const a = document.createElement('a');
+      a.href = dataStr;
+      a.download = `pubquiz_export_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      showNotification('Daten erfolgreich exportiert.');
+    };
+
+    window.importJSON = (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed.teams) state.teams = parsed.teams;
+          if (parsed.weeks) state.weeks = parsed.weeks;
+          if (parsed.startDate) state.startDate = parsed.startDate;
+          saveState();
+          showNotification('Daten erfolgreich importiert.');
+          renderApp();
+        } catch (error) {
+          showNotification('Fehler beim Importieren der Datei. Ungültiges Format.', 'error');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = ''; // Reset Input
+    };
+
+    window.exportHTML = () => {
+      const sortedStats = getCalculatedStats();
+      
+      let htmlContent = `
+        <!DOCTYPE html>
+        <html lang="de">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Pubquiz Statistik</title>
+          <style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 2rem; }
+            .container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+            h1 { color: #4f46e5; text-align: center; margin-bottom: 2rem; }
+            table { border-collapse: collapse; margin-top: 1rem; width: 100%; }
+            th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+            th { background-color: #f1f5f9; font-weight: 600; color: #64748b; text-transform: uppercase; font-size: 0.875rem; }
+            tr:hover { background-color: #f8fafc; }
+            .text-right { text-align: right; }
+            .font-bold { font-weight: bold; }
+            .rank { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.875rem; }
+            .rank-1 { background-color: #fef08a; color: #a16207; }
+            .rank-2 { background-color: #e2e8f0; color: #334155; }
+            .rank-3 { background-color: #ffedd5; color: #9a3412; }
+            .rank-other { color: #64748b; }
+            .footer { margin-top: 2rem; text-align: center; font-size: 0.875rem; color: #94a3b8; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>🏆 Pubquiz Gesamtwertung</h1>
+            <table>
+              <thead>
+                <tr>
+                  <th>Platz</th>
+                  <th>Team</th>
+                  <th class="text-right">Gesamtpunkte</th>
+                  <th class="text-right">Ø Punkte</th>
+                  <th class="text-right">Teilnahmen</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${sortedStats.map((team, index) => `
+                  <tr>
+                    <td>
+                      <div class="rank ${index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : 'rank-other'}">
+                        ${index + 1}
+                      </div>
+                    </td>
+                    <td class="font-bold">${team.name}</td>
+                    <td class="text-right font-bold" style="color: #4f46e5;">${team.totalPoints.toFixed(1)}</td>
+                    <td class="text-right">${team.average.toFixed(1)}</td>
+                    <td class="text-right">${team.attendance}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+            <div class="footer">
+              Stand: ${new Date().toLocaleDateString('de-DE')} | Generiert mit Pubquiz Manager
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Pubquiz_Statistik_${new Date().toISOString().split('T')[0]}.html`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showNotification('Statistik als HTML exportiert.');
+    };
+
+    // --- RENDER FUNCTIONS ---
+    
+    const renderNav = () => {
+      const tabs = [
+        { id: 'stats', label: 'Statistik', icon: 'trophy' },
+        { id: 'weeks', label: 'Spieltage', icon: 'calendar-plus' },
+        { id: 'teams', label: 'Teams', icon: 'users' },
+        { id: 'settings', label: 'Daten & Setup', icon: 'settings' }
+      ];
+
+      document.getElementById('nav-container').innerHTML = tabs.map(tab => `
+        <button
+          onclick="window.setTab('${tab.id}')"
+          class="flex items-center gap-2 px-4 py-3 text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap ${
+            state.activeTab === tab.id 
+              ? 'bg-white text-indigo-700' 
+              : 'text-indigo-100 hover:bg-indigo-500 hover:text-white'
+          }"
+        >
+          <i data-lucide="${tab.icon}" class="w-4 h-4"></i>
+          ${tab.label}
+        </button>
+      `).join('');
+    };
+
+    const renderStats = () => {
+      const stats = getCalculatedStats();
+      
+      let rowsHtml = '';
+      if (stats.length === 0) {
+        rowsHtml = `<tr><td colspan="5" class="p-8 text-center text-slate-500 italic">Noch keine Daten vorhanden. Lege Teams und Spieltage an.</td></tr>`;
+      } else {
+        rowsHtml = stats.map((team, index) => {
+          const rankClass = index === 0 ? 'bg-yellow-100 text-yellow-700' : 
+                            index === 1 ? 'bg-slate-200 text-slate-700' : 
+                            index === 2 ? 'bg-amber-100 text-amber-800' : 
+                            'text-slate-500';
+          return `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${rankClass}">${index + 1}</div>
+              </td>
+              <td class="p-4 font-medium text-slate-800">${team.name}</td>
+              <td class="p-4 text-right font-bold text-indigo-600">${team.totalPoints.toFixed(1)}</td>
+              <td class="p-4 text-right text-slate-600">${team.average.toFixed(1)}</td>
+              <td class="p-4 text-right text-slate-600">${team.attendance}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      return `
+        <div class="space-y-6 animate-fade-in">
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h2 class="text-xl font-bold text-slate-800">Gesamtwertung</h2>
+                <span class="text-sm text-slate-500">${state.teams.length} Teams | ${state.weeks.length} Spieltage</span>
+              </div>
+              <button 
+                onclick="window.exportHTML()"
+                class="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                <i data-lucide="file-code" class="w-4 h-4 text-indigo-600"></i>
+                Als HTML exportieren
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 text-slate-500 text-sm uppercase tracking-wider">
+                    <th class="p-4 font-semibold border-b">Platz</th>
+                    <th class="p-4 font-semibold border-b">Team</th>
+                    <th class="p-4 font-semibold border-b text-right">Gesamtpunkte</th>
+                    <th class="p-4 font-semibold border-b text-right">Ø Punkte</th>
+                    <th class="p-4 font-semibold border-b text-right">Teilnahmen</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  ${rowsHtml}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    const renderWeeks = () => {
+      if (state.weeks.length === 0) {
+        return `
+          <div class="space-y-6 animate-fade-in">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-xl font-bold text-slate-800">Spieltage verwalten</h2>
+              <button onclick="window.addWeek()" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm">
+                <i data-lucide="plus" class="w-5 h-5"></i> Neue Woche anlegen
+              </button>
+            </div>
+            <div class="text-center p-12 bg-white rounded-xl border border-slate-200 border-dashed text-slate-500">
+              <i data-lucide="calendar-plus" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+              <p class="text-lg mb-2">Noch keine Spieltage vorhanden.</p>
+              <p class="text-sm">Klicke auf "Neue Woche anlegen", um zu starten.</p>
+            </div>
+          </div>
+        `;
+      }
+
+      const weeksHtml = state.weeks.map((week, index) => {
+        const isExpanded = !!state.expandedWeeks[week.id];
+        
+        // Verfügbare Teams berechnen und alphabetisch sortieren
+        const availableTeams = state.teams
+          .filter(t => !week.scores.some(s => s.teamId === t.id))
+          .sort((a, b) => a.name.localeCompare(b.name));
+        
+        let selectOptions = `<option value="" selected disabled>+ Team aus Pool hinzufügen...</option>`;
+        availableTeams.forEach(t => {
+          selectOptions += `<option value="${t.id}">${t.name}</option>`;
+        });
+        if (availableTeams.length === 0) {
+          selectOptions += `<option disabled>Alle Teams nehmen bereits teil</option>`;
+        }
+
+        let scoresHtml = '';
+        if (week.scores.length === 0) {
+          scoresHtml = `<p class="text-center text-slate-500 py-4 italic">Noch keine Teams für diesen Spieltag eingetragen.</p>`;
+        } else {
+          // Scores sortiert nach Punkten absteigend
+          const sortedScores = [...week.scores].sort((a, b) => b.points - a.points);
+          
+          let rows = sortedScores.map(score => {
+            const baseTeam = state.teams.find(t => t.id === score.teamId);
+            const baseTeamName = baseTeam ? baseTeam.name : 'Unbekanntes Team';
+            
+            return `
+              <tr class="border-b border-slate-100 hover:bg-slate-50">
+                <td class="py-3 pr-4 text-slate-500">${baseTeamName}</td>
+                <td class="py-3 px-4">
+                  <input type="text" value="${score.teamNameUsed}" 
+                         onchange="window.updateScore('${week.id}', '${score.teamId}', 'teamNameUsed', this.value)"
+                         class="bg-white border border-slate-300 text-slate-900 text-sm rounded-md focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2"
+                         placeholder="z.B. Team A klein" />
+                </td>
+                <td class="py-3 px-4">
+                  <input type="number" step="0.1" value="${score.points}" 
+                         onchange="window.updateScore('${week.id}', '${score.teamId}', 'points', this.value)"
+                         class="bg-white border border-slate-300 text-slate-900 font-bold text-right rounded-md focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2 ml-auto"
+                         style="max-width: 100px;" />
+                </td>
+                <td class="py-3 pl-4 text-right">
+                  <button onclick="window.removeTeamFromWeek('${week.id}', '${score.teamId}')" class="text-slate-400 hover:text-red-500 p-2">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+
+          scoresHtml = `
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead>
+                  <tr class="border-b-2 border-slate-100 text-sm text-slate-500">
+                    <th class="pb-3 pr-4 font-semibold w-1/3">Stamm-Team (für Statistik)</th>
+                    <th class="pb-3 px-4 font-semibold w-1/3">Heutiger Teamname (Variation)</th>
+                    <th class="pb-3 px-4 font-semibold text-right">Punkte</th>
+                    <th class="pb-3 pl-4"></th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </div>
+          `;
+        }
+
+        const expandedHtml = isExpanded ? `
+          <div class="p-4 sm:p-6 bg-white">
+            <div class="mb-6 bg-indigo-50 p-4 rounded-lg border border-indigo-100 flex items-center gap-4">
+              <select onchange="window.addTeamToWeek('${week.id}', this.value); this.value='';" 
+                      class="flex-1 bg-white border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5">
+                ${selectOptions}
+              </select>
+              <span class="text-sm text-slate-500 italic hidden sm:block">Fehlt ein Team? Lege es im Reiter "Teams" an.</span>
+            </div>
+            ${scoresHtml}
+          </div>
+        ` : '';
+
+        return `
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors ${isExpanded ? 'border-b border-slate-100 bg-slate-50' : ''}"
+                 onclick="window.toggleWeek('${week.id}')">
+              <div class="flex items-center gap-3">
+                <i data-lucide="${isExpanded ? 'chevron-down' : 'chevron-right'}" class="text-slate-400"></i>
+                <h3 class="font-bold text-lg text-slate-800 flex items-center gap-3">
+                  Spieltag ${state.weeks.length - index}
+                  <input type="date" value="${week.date}"
+                         onchange="window.updateWeekDate('${week.id}', this.value)"
+                         onclick="event.stopPropagation()"
+                         class="text-sm font-normal text-slate-600 bg-slate-100 hover:bg-slate-200 focus:bg-white border border-transparent focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 px-2 py-1 rounded-md cursor-text transition-all" />
+                </h3>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="text-sm text-slate-500">${week.scores.length} Teams</span>
+                <button onclick="event.stopPropagation(); window.deleteWeek('${week.id}')" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Spieltag löschen">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            ${expandedHtml}
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="space-y-6 animate-fade-in">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-slate-800">Spieltage verwalten</h2>
+            <button onclick="window.addWeek()" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm">
+              <i data-lucide="plus" class="w-5 h-5"></i> Neue Woche anlegen
+            </button>
+          </div>
+          <div class="space-y-4">
+            ${weeksHtml}
+          </div>
+        </div>
+      `;
+    };
+
+    const renderTeams = () => {
+      let teamsListHtml = '';
+      if (state.teams.length === 0) {
+        teamsListHtml = `<p class="p-8 text-center text-slate-500 italic">Noch keine Teams im Pool.</p>`;
+      } else {
+        // Teams für die Liste im Pool nicht unbedingt alphabetisch (oder doch, hier lassen wir die Einfügereihenfolge oder sortieren)
+        // Einfache Darstellung, ohne Sortierung (damit neue Teams unten landen):
+        teamsListHtml = `<ul class="divide-y divide-slate-100">` + 
+          state.teams.map(team => `
+            <li class="p-4 flex items-center gap-4 hover:bg-slate-50">
+              <input type="text" value="${team.name}"
+                     onchange="window.updateTeamName('${team.id}', this.value)"
+                     class="flex-1 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-indigo-500 text-slate-800 font-medium rounded-md p-2 transition-all" />
+              <button onclick="window.deleteTeam('${team.id}')" class="text-slate-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors flex-shrink-0" title="Team löschen">
+                <i data-lucide="trash-2" class="w-5 h-5"></i>
+              </button>
+            </li>
+          `).join('') + `</ul>`;
+      }
+
+      return `
+        <div class="grid md:grid-cols-3 gap-6 animate-fade-in">
+          <div class="md:col-span-1">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 sticky top-6">
+              <h3 class="text-lg font-bold text-slate-800 mb-4">Neues Team anlegen</h3>
+              <form onsubmit="window.addTeam(event)" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Team Name</label>
+                  <input type="text" id="new-team-name" required placeholder="z.B. Die Quizmaster"
+                         class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5" />
+                </div>
+                <button type="submit" class="w-full flex justify-center items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white p-2.5 rounded-lg font-medium transition-colors">
+                  <i data-lucide="plus" class="w-5 h-5"></i> Hinzufügen
+                </button>
+              </form>
+              <div class="mt-6 pt-6 border-t border-slate-100 text-sm text-slate-500">
+                <p><strong>Hinweis:</strong> Variationen von Teamnamen (z.B. wegen fehlender Mitglieder) werden direkt beim Eintragen am jeweiligen Spieltag angegeben.</p>
+              </div>
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="p-6 border-b border-slate-100 bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">Team-Pool (${state.teams.length})</h3>
+              </div>
+              <div class="p-0">
+                ${teamsListHtml}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    const renderSettings = () => {
+      return `
+        <div class="max-w-2xl mx-auto space-y-6 animate-fade-in">
+          
+          <!-- Setup -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+              <i data-lucide="calendar-plus" class="w-5 h-5 text-indigo-500"></i> Intervall Setup
+            </h3>
+            <p class="text-slate-600 text-sm mb-4">
+              Wähle das Startdatum für das Pubquiz. Neue Wochen werden basierend auf dem letzten Eintrag oder diesem Datum automatisch generiert (immer +7 Tage).
+            </p>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Startdatum / Referenzdatum</label>
+              <input type="date" value="${state.startDate}" onchange="window.setStartDate(this.value)"
+                     class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 max-w-xs" />
+            </div>
+          </div>
+
+          <!-- Im/Export -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+              <i data-lucide="save" class="w-5 h-5 text-indigo-500"></i> Datensicherung
+            </h3>
+            <p class="text-slate-600 text-sm mb-6">
+              Alle Daten werden automatisch in deinem aktuellen Browser gespeichert. 
+              Erstelle regelmäßig ein Backup als JSON-Datei, um die Daten auf ein anderes Gerät zu übertragen oder vor Verlust zu schützen.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button onclick="window.exportJSON()" class="flex-1 flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 p-3 rounded-lg font-medium transition-colors">
+                <i data-lucide="download" class="w-5 h-5"></i> Als JSON exportieren
+              </button>
+              
+              <div class="flex-1 relative">
+                <input type="file" accept=".json" onchange="window.importJSON(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                <div class="flex items-center justify-center gap-2 bg-white text-slate-700 hover:bg-slate-50 border border-slate-300 p-3 rounded-lg font-medium transition-colors pointer-events-none">
+                  <i data-lucide="upload" class="w-5 h-5"></i> Daten importieren
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      `;
+    };
+
+    const renderApp = () => {
+      renderNav();
+      
+      const contentContainer = document.getElementById('app-content');
+      if (state.activeTab === 'stats') contentContainer.innerHTML = renderStats();
+      if (state.activeTab === 'weeks') contentContainer.innerHTML = renderWeeks();
+      if (state.activeTab === 'teams') contentContainer.innerHTML = renderTeams();
+      if (state.activeTab === 'settings') contentContainer.innerHTML = renderSettings();
+
+      // Lucide Icons nach jedem Render initialisieren
+      lucide.createIcons();
+    };
+
+    // --- INITIALIZATION ---
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      renderApp();
+    });
+
+  </script>
+</body>
+</html>
