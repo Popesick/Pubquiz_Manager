@@ -139,9 +139,58 @@
     {
       "id": "c7c2ba31-918f-4c3b-beea-f910eddab106",
       "name": "Babberts Bierfelzl"
+    },
+    {
+      "id": "58867395-f0d5-49cd-b04a-6fbf59ce236c",
+      "name": "Quizteam Aguilera"
+    },
+    {
+      "id": "0bfae9a0-1958-4eae-9e08-92bb099d6962",
+      "name": "Don Promillo"
     }
   ],
   "weeks": [
+    {
+      "id": "22fffaa4-5270-4832-84a3-ce24adcdade7",
+      "date": "2026-04-21",
+      "scores": [
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 15.5
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Die süßen Schattenspieler",
+          "points": 19
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 20.5
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 19.5
+        },
+        {
+          "teamId": "58867395-f0d5-49cd-b04a-6fbf59ce236c",
+          "teamNameUsed": "Quizteam Aguilera",
+          "points": 17
+        },
+        {
+          "teamId": "4baac91e-aff8-4738-8caf-28ae2dceaa38",
+          "teamNameUsed": "Rätsel Brezn",
+          "points": 17.5
+        },
+        {
+          "teamId": "0bfae9a0-1958-4eae-9e08-92bb099d6962",
+          "teamNameUsed": "Don Promillo",
+          "points": 15
+        }
+      ]
+    },
     {
       "id": "2e4405ee-9dda-4d17-8d04-49d2781cea2d",
       "date": "2026-04-14",
