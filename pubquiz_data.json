@@ -147,9 +147,67 @@
     {
       "id": "0bfae9a0-1958-4eae-9e08-92bb099d6962",
       "name": "Don Promillo"
+    },
+    {
+      "id": "872d90d4-9962-4670-a64e-42f47c49158a",
+      "name": "Kastuluspfeiffen"
+    },
+    {
+      "id": "41bebeb3-8e2b-44fe-bfe9-0ff90bd1f330",
+      "name": "Die Shabis"
+    },
+    {
+      "id": "8dc6f5f0-6b96-4857-bbcb-538edcd1c3cd",
+      "name": "5c1c"
     }
   ],
   "weeks": [
+    {
+      "id": "610a2af2-8a36-43b1-9a88-4646bdabd8f6",
+      "date": "2026-04-28",
+      "scores": [
+        {
+          "teamId": "872d90d4-9962-4670-a64e-42f47c49158a",
+          "teamNameUsed": "Kastuluspfeiffen",
+          "points": 24
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 17
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 25.5
+        },
+        {
+          "teamId": "41bebeb3-8e2b-44fe-bfe9-0ff90bd1f330",
+          "teamNameUsed": "Die Shabis",
+          "points": 21.5
+        },
+        {
+          "teamId": "8dc6f5f0-6b96-4857-bbcb-538edcd1c3cd",
+          "teamNameUsed": "5c1c",
+          "points": 18.5
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Flotte Schattenspieler",
+          "points": 20.5
+        },
+        {
+          "teamId": "8f4b4c0f-42f4-45bb-a8cd-5cda339c5e83",
+          "teamNameUsed": "Newcomer",
+          "points": 16
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 23.5
+        }
+      ]
+    },
     {
       "id": "22fffaa4-5270-4832-84a3-ce24adcdade7",
       "date": "2026-04-21",
