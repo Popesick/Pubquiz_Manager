@@ -159,9 +159,58 @@
     {
       "id": "8dc6f5f0-6b96-4857-bbcb-538edcd1c3cd",
       "name": "5c1c"
+    },
+    {
+      "id": "f47aca98-6c55-4102-aef6-5fe5115b82fc",
+      "name": "Die ????"
+    },
+    {
+      "id": "75b45182-410f-4065-b71a-7c4ae0494556",
+      "name": "Les Quizerables"
     }
   ],
   "weeks": [
+    {
+      "id": "829802e0-bfd0-47b2-a270-ee5cb6f31716",
+      "date": "2026-05-05",
+      "scores": [
+        {
+          "teamId": "f47aca98-6c55-4102-aef6-5fe5115b82fc",
+          "teamNameUsed": "Die ????",
+          "points": 16.5
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 17.5
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Der Schattenspieler",
+          "points": 13.5
+        },
+        {
+          "teamId": "8f4b4c0f-42f4-45bb-a8cd-5cda339c5e83",
+          "teamNameUsed": "Newcomer",
+          "points": 16
+        },
+        {
+          "teamId": "75b45182-410f-4065-b71a-7c4ae0494556",
+          "teamNameUsed": "Les Quizerables",
+          "points": 15
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 17
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 18
+        }
+      ]
+    },
     {
       "id": "610a2af2-8a36-43b1-9a88-4646bdabd8f6",
       "date": "2026-04-28",
