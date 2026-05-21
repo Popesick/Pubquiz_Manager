@@ -167,9 +167,104 @@
     {
       "id": "75b45182-410f-4065-b71a-7c4ae0494556",
       "name": "Les Quizerables"
+    },
+    {
+      "id": "88efae47-d73c-42a6-b624-aa56574141d4",
+      "name": "Cracking Backs"
+    },
+    {
+      "id": "e1b3084e-59b1-46d7-86cf-6f01d9c901b0",
+      "name": "Trottelhoppel"
     }
   ],
   "weeks": [
+    {
+      "id": "5c817557-f5c4-4096-8b60-94317b397425",
+      "date": "2026-05-19",
+      "scores": [
+        {
+          "teamId": "88efae47-d73c-42a6-b624-aa56574141d4",
+          "teamNameUsed": "Cracking Backs",
+          "points": 20
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 10
+        },
+        {
+          "teamId": "e1b3084e-59b1-46d7-86cf-6f01d9c901b0",
+          "teamNameUsed": "Trottelhoppel",
+          "points": 15.5
+        },
+        {
+          "teamId": "4baac91e-aff8-4738-8caf-28ae2dceaa38",
+          "teamNameUsed": "Rätsel Brezn",
+          "points": 20
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Die schneidigen Schattenspieler",
+          "points": 18.5
+        },
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 18.5
+        },
+        {
+          "teamId": "8f4b4c0f-42f4-45bb-a8cd-5cda339c5e83",
+          "teamNameUsed": "Newcomer",
+          "points": 17.5
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 18.5
+        }
+      ]
+    },
+    {
+      "id": "0cd8e50e-e4d7-4d89-977f-fafb7ec27c6f",
+      "date": "2026-05-12",
+      "scores": [
+        {
+          "teamId": "07e6e70d-f1e7-4339-b41c-d4aec435da63",
+          "teamNameUsed": "De Koidn",
+          "points": 21
+        },
+        {
+          "teamId": "0a282cea-4bb4-445a-8d08-2b87e12bef7b",
+          "teamNameUsed": "Die glorreichen 6",
+          "points": 17
+        },
+        {
+          "teamId": "6c492327-1bd8-488e-a2d1-a801dc6ae715",
+          "teamNameUsed": "For Shizzle ma Quizzle",
+          "points": 22
+        },
+        {
+          "teamId": "8f4b4c0f-42f4-45bb-a8cd-5cda339c5e83",
+          "teamNameUsed": "Newcomer",
+          "points": 16.5
+        },
+        {
+          "teamId": "eb1d4416-fe5d-4c7d-b2d7-fda1738a7f29",
+          "teamNameUsed": "Schattenspieler",
+          "points": 20
+        },
+        {
+          "teamId": "4baac91e-aff8-4738-8caf-28ae2dceaa38",
+          "teamNameUsed": "Rätsel Brezn",
+          "points": 20
+        },
+        {
+          "teamId": "db79caf9-6cf4-41eb-af9c-9fb21235c7df",
+          "teamNameUsed": "Bierkönige",
+          "points": 15.5
+        }
+      ]
+    },
     {
       "id": "829802e0-bfd0-47b2-a270-ee5cb6f31716",
       "date": "2026-05-05",
